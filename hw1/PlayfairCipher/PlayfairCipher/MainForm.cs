@@ -21,6 +21,8 @@ namespace Homework1
         private string folderDecryptDestination = "";
         private string fileDecryptSource = "";
 
+        private PlayfairCipher playfairCipher;
+
         private bool shouldCallToggleControls = true;
 
         #endregion
@@ -28,6 +30,7 @@ namespace Homework1
         public MainForm()
         {
             InitializeComponent();
+            playfairCipher = new PlayfairCipher();
         }
 
         #region Properties
@@ -88,6 +91,23 @@ namespace Homework1
             tbChooseFileToEncrypt.Text = fileEncryptSource;
             tbChooseFolderFSWEncrypt.Text = folderEncryptDestination;
         }
+
+        private bool ValidateForEncrypt()
+        {
+            if (File.Exists(fileEncryptSource)
+                && Directory.Exists(folderEncryptDestination)
+                && fileEncryptSource.EndsWith(".txt"))
+                return true;
+            else return false;
+        }
+        private bool ValidateForDecrypt()
+        {
+            if (File.Exists(fileDecryptSource)
+                && Directory.Exists(folderDecryptDestination)
+                && fileDecryptSource.EndsWith(".encrypt.txt")) return true;
+            else return false;
+        }
+
         #endregion
 
         #region Event Handlers
@@ -143,6 +163,23 @@ namespace Homework1
         private void fileSystemWatcher_Created(object sender, FileSystemEventArgs e)
         {
             //TODO: call encrypt on new file
+            playfairCipher.Encrypt(e.FullPath, folderEncryptDestination);
+        }
+
+        private void btnEncrypt_Click(object sender, EventArgs e)
+        {
+            if (ValidateForEncrypt()) playfairCipher.Encrypt(fileEncryptSource, folderEncryptDestination);
+            else MessageBox.Show("You must choose a valid source and destination for encryption." +
+                "\nFile must be \"*.txt\".",
+                        "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        private void btnDecrypt_Click(object sender, EventArgs e)
+        {
+            if (ValidateForDecrypt()) playfairCipher.Decrypt(fileDecryptSource, folderDecryptDestination);
+            else MessageBox.Show("You must choose a valid source and destination for decryption." +
+                "\nFile must be \"*.encrypt.txt\".",
+                        "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void btnChooseFolderToWatch_Click(object sender, EventArgs e)
@@ -248,27 +285,5 @@ namespace Homework1
         }
 
         #endregion
-
-        private void btnEncrypt_Click(object sender, EventArgs e)
-        {
-            //TODO: call encrypt on file from fileEncryptSource
-
-            /* 
-             * store in folderEncryptDestination
-             * validate fileEncryptSource and folderDecryptDestinaton
-             * validate if file is *.txt 
-             */
-        }
-
-        private void btnDecrypt_Click(object sender, EventArgs e)
-        {
-            //TODO: call encrypt on file from fileDecryptSource
-
-            /* 
-             * store in folderDecryptDestination
-             * validate fileDecryptSource and folderDecryptDestination 
-             * validate if file is *.txt 
-             */
-        }
     }
 }
