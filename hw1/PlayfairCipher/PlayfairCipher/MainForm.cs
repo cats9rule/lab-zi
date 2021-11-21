@@ -33,31 +33,6 @@ namespace Homework1
             playfairCipher = new PlayfairCipher();
         }
 
-        #region Properties
-
-        public string FolderToWatch
-        {
-            get { return folderToWatch; }
-            set { folderToWatch = value; }
-        }
-        public string FileEncryptTarget
-        {
-            get { return fileEncryptSource; }
-            set { fileEncryptSource = value; }
-        }
-        public string FolderDecryptTarget
-        {
-            get { return folderDecryptDestination; }
-            set { folderDecryptDestination = value; }
-        }
-        public string FileDecryptSource
-        {
-            get { return fileDecryptSource; }
-            set { fileDecryptSource = value; }
-        }
-
-        #endregion
-
         #region Methods
 
         private void ToggleControls()
@@ -162,7 +137,6 @@ namespace Homework1
 
         private void fileSystemWatcher_Created(object sender, FileSystemEventArgs e)
         {
-            //TODO: call encrypt on new file
             playfairCipher.Encrypt(e.FullPath, folderEncryptDestination);
         }
 
